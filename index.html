@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>坂道抽选时间看板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="min-h-screen bg-slate-50">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useEffect, useMemo, useState } = React;
+
+    const GROUP_THEME = {
+      "乃木坂46": {
+        badge: "bg-violet-600",
+        border: "border-violet-200",
+        bg: "bg-violet-50",
+        text: "text-violet-700",
+      },
+      "櫻坂46": {
+        badge: "bg-pink-600",
+        border: "border-pink-200",
+        bg: "bg-pink-50",
+        text: "text-pink-700",
+      },
+      "日向坂46": {
+        badge: "bg-sky-600",
+        border: "border-sky-200",
+        bg: "bg-sky-50",
+        text: "text-sky-700",
+      },
+    };
+    const FILTER_TABS = [
+      { key: "ALL", label: "全部" },
+      { key: "乃木坂46", label: "乃木坂" },
+      { key: "櫻坂46", label: "樱坂" },
+      { key: "日向坂46", label: "日向坂" },
+    ];
+
+    const toDate = (value) => new Date(value);
+
+    function fmtJst(date) {
+      return new Intl.DateTimeFormat("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).format(date);
+    }
+
+    function countdownText(ms) {
+      if (ms <= 0) return "已截止";
+      const sec = Math.floor(ms / 1000);
+      const d = Math.floor(sec / 86400);
+      const h = Math.floor((sec % 86400) / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      return `${d}天 ${h}小时 ${m}分钟`;
+    }
+
+    function buildIcs(item) {
+      const end = toDate(item.applyEnd);
+      const start = item.applyStart ? toDate(item.applyStart) : new Date(end.getTime() - 60 * 60 * 1000);
+      const stamp = new Date();
+
+      const toUtcIcs = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+      const escapeText = (s) =>
+        String(s || "")
+          .replace(/\\/g, "\\\\")
+          .replace(/\n/g, "\\n")
+          .replace(/,/g, "\\,")
+          .replace(/;/g, "\\;");
+
+      const uid = `${Date.now()}-${Math.random().toString(36).slice(2)}@sakadates`;
+      const title = `${item.group}｜${item.title}`;
+      const desc = `官网链接: ${item.url}`;
+
+      return [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Saka DDL//Lottery Calendar//CN",
+        "CALSCALE:GREGORIAN",
+        "BEGIN:VEVENT",
+        `UID:${uid}`,
+        `DTSTAMP:${toUtcIcs(stamp)}`,
+        `DTSTART:${toUtcIcs(start)}`,
+        `DTEND:${toUtcIcs(end)}`,
+        `SUMMARY:${escapeText(title)}`,
+        `DESCRIPTION:${escapeText(desc)}`,
+        `URL:${escapeText(item.url)}`,
+        "BEGIN:VALARM",
+        "ACTION:DISPLAY",
+        "DESCRIPTION:抽选即将截止（24小时提醒）",
+        "TRIGGER:-P1D",
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR",
+      ].join("\r\n");
+    }
+
+    function downloadIcs(item) {
+      const blob = new Blob([buildIcs(item)], { type: "text/calendar;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${item.group}-${item.title}`.replace(/[\\/:*?"<>|]/g, "_").slice(0, 80) + ".ics";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function App() {
+      const [payload, setPayload] = useState({ generatedAt: null, timezone: "Asia/Tokyo", items: [] });
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState("");
+      const [now, setNow] = useState(Date.now());
+      const [selectedGroup, setSelectedGroup] = useState("ALL");
+
+      useEffect(() => {
+        fetch("./data.json", { cache: "no-store" })
+          .then((r) => {
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            return r.json();
+          })
+          .then((data) => setPayload(data))
+          .catch((e) => setError(`读取 data.json 失败：${e.message}`))
+          .finally(() => setLoading(false));
+      }, []);
+
+      useEffect(() => {
+        const timer = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(timer);
+      }, []);
+
+      const activeItems = useMemo(() => {
+        const list = Array.isArray(payload.items) ? payload.items : [];
+        return list
+          .map((item) => {
+            const startMs = item.applyStart ? toDate(item.applyStart).getTime() : null;
+            const endMs = toDate(item.applyEnd).getTime();
+            const status = startMs && startMs > now ? "未开始" : "进行中";
+            return { ...item, startMs, endMs, status };
+          })
+          .filter((item) => item.endMs > now)
+          .sort((a, b) => (a.startMs ?? a.endMs) - (b.startMs ?? b.endMs));
+      }, [payload, now]);
+
+      const filteredItems = useMemo(() => {
+        if (selectedGroup === "ALL") return activeItems;
+        return activeItems.filter((item) => item.group === selectedGroup);
+      }, [activeItems, selectedGroup]);
+
+      const upcomingItems = useMemo(
+        () => filteredItems.filter((item) => item.status === "未开始"),
+        [filteredItems]
+      );
+      const ongoingItems = useMemo(
+        () => filteredItems.filter((item) => item.status === "进行中"),
+        [filteredItems]
+      );
+
+      return (
+        <div>
+          <header className="bg-gradient-to-r from-violet-600 via-pink-500 to-sky-500 text-white shadow">
+            <div className="mx-auto max-w-5xl px-4 py-6">
+              <h1 className="text-2xl font-bold">坂道系抽选截止看板</h1>
+              <p className="mt-2 text-sm text-white/90">乃木坂46 / 櫻坂46 / 日向坂46（JST）</p>
+            </div>
+          </header>
+
+          <main className="mx-auto max-w-5xl px-4 py-6">
+            <div className="mb-4 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
+              <p>数据更新时间：{payload.generatedAt ? fmtJst(new Date(payload.generatedAt)) : "未知"}（JST）</p>
+              <p className="mt-1">前端实时过滤：若活动已截止，将自动从列表移除。</p>
+            </div>
+
+            <div className="mb-4 flex flex-wrap gap-2">
+              {FILTER_TABS.map((tab) => {
+                const active = selectedGroup === tab.key;
+                return (
+                  <button
+                    key={tab.key}
+                    onClick={() => setSelectedGroup(tab.key)}
+                    className={`rounded-full px-4 py-2 text-sm transition ${
+                      active
+                        ? "bg-slate-900 text-white"
+                        : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {loading && <div className="rounded-xl bg-white p-6 text-slate-500">正在读取数据...</div>}
+            {error && <div className="rounded-xl border border-rose-200 bg-rose-50 p-6 text-rose-700">{error}</div>}
+
+            {!loading && !error && filteredItems.length === 0 && (
+              <div className="rounded-xl bg-white p-6 text-slate-500">当前没有未截止的抽选活动。</div>
+            )}
+
+            {!!upcomingItems.length && (
+              <section className="mb-5">
+                <h3 className="mb-2 text-sm font-semibold text-amber-700">未开始</h3>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {upcomingItems.map((item) => {
+                    const theme = GROUP_THEME[item.group] || GROUP_THEME["乃木坂46"];
+                    const remain = item.endMs - now;
+                    const urgent = remain <= 24 * 60 * 60 * 1000;
+
+                    return (
+                      <article key={`${item.group}-${item.url}-${item.round || "single"}-${item.applyEnd}`} className={`rounded-2xl border ${theme.border} ${theme.bg} p-4 shadow-sm`}>
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className={`rounded-full px-2 py-1 text-xs text-white ${theme.badge}`}>{item.group}</span>
+                          <span className="text-xs font-semibold text-amber-700">未开始</span>
+                        </div>
+                        <h2 className="break-words text-sm font-semibold leading-6 text-slate-800">{item.title}</h2>
+                        {item.round && <p className="mt-1 text-xs font-medium text-slate-700">{item.round}</p>}
+
+                        <div className="mt-3 space-y-1 text-xs text-slate-600">
+                          <p>开始：{item.applyStart ? fmtJst(toDate(item.applyStart)) : "未提取到"}</p>
+                          <p>截止：{fmtJst(toDate(item.applyEnd))}</p>
+                          <p className={urgent ? "font-semibold text-rose-600" : `font-medium ${theme.text}`}>倒计时：{countdownText(remain)}</p>
+                        </div>
+
+                        <div className="mt-4 flex gap-2">
+                          <a href={item.url} target="_blank" rel="noreferrer" className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">打开官网</a>
+                          <button onClick={() => downloadIcs(item)} className="rounded-lg bg-slate-900 px-3 py-2 text-xs text-white hover:bg-slate-700">加入日历</button>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+            <section>
+              <h3 className="mb-2 text-sm font-semibold text-emerald-700">进行中</h3>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {ongoingItems.map((item) => {
+                const theme = GROUP_THEME[item.group] || GROUP_THEME["乃木坂46"];
+                const remain = item.endMs - now;
+                const urgent = remain <= 24 * 60 * 60 * 1000;
+
+                return (
+                  <article key={`${item.group}-${item.url}-${item.round || "single"}-${item.applyEnd}`} className={`rounded-2xl border ${theme.border} ${theme.bg} p-4 shadow-sm`}>
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className={`rounded-full px-2 py-1 text-xs text-white ${theme.badge}`}>{item.group}</span>
+                      <span className={`text-xs ${urgent ? "font-semibold text-rose-600" : "text-slate-600"}`}>
+                        {urgent ? "24小时内截止" : "进行中"}
+                      </span>
+                    </div>
+                    <h2 className="break-words text-sm font-semibold leading-6 text-slate-800">{item.title}</h2>
+                    {item.round && <p className="mt-1 text-xs font-medium text-slate-700">{item.round}</p>}
+
+                    <div className="mt-3 space-y-1 text-xs text-slate-600">
+                      <p>开始：{item.applyStart ? fmtJst(toDate(item.applyStart)) : "未提取到"}</p>
+                      <p>截止：{fmtJst(toDate(item.applyEnd))}</p>
+                      <p className={urgent ? "font-semibold text-rose-600" : `font-medium ${theme.text}`}>倒计时：{countdownText(remain)}</p>
+                    </div>
+
+                    <div className="mt-4 flex gap-2">
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700 hover:bg-slate-50"
+                      >
+                        打开官网
+                      </a>
+                      <button
+                        onClick={() => downloadIcs(item)}
+                        className="rounded-lg bg-slate-900 px-3 py-2 text-xs text-white hover:bg-slate-700"
+                      >
+                        加入日历
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+              </div>
+            </section>
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
