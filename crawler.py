@@ -26,6 +26,9 @@ NOW_JST = datetime.now(JST)
 KEYWORDS = ("ミート＆グリート", "抽選購入申込", "応募受付", "シングル")
 SCHEDULE_MARKERS = ("抽選購入申込スケジュール", "抽選購入申込", "応募受付")
 
+# 乃木坂新闻列表为前端渲染，静态 HTML 无详情链接；官方页面通过该 API 拉取列表与正文摘要。
+NOGI_NEWS_API = "https://www.nogizaka46.com/s/n46/api/list/news_v2"
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -69,6 +72,19 @@ def fetch_with_retry(url: str, retries: int = 3, timeout: int = 15) -> str:
                 raise
             time.sleep(1.5 * attempt)
     raise RuntimeError(f"failed to fetch {url}")
+
+
+def fetch_json_with_retry(url: str, retries: int = 3, timeout: int = 15):
+    for attempt in range(1, retries + 1):
+        try:
+            response = requests.get(url, headers=HEADERS, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except (requests.RequestException, ValueError):
+            if attempt == retries:
+                raise
+            time.sleep(1.5 * attempt)
+    raise RuntimeError(f"failed to fetch json {url}")
 
 
 def normalize_space(text: str) -> str:
@@ -217,6 +233,16 @@ def scrape_fortunemeets_group(group: str, root_url: str) -> List[dict]:
     return rows
 
 
+def title_matches_keywords(title: str) -> bool:
+    """列表标题里可能出现半角 &，关键词使用全角 ＆，统一后再匹配。"""
+    normalized = (
+        title.replace("&", "＆")
+        .replace("∧", "＆")
+        .replace("﹠", "＆")
+    )
+    return any(kw in normalized for kw in KEYWORDS)
+
+
 def parse_news_list(group: str, base_url: str, list_html: str) -> List[NewsCandidate]:
     soup = BeautifulSoup(list_html, "html.parser")
     found = {}
@@ -225,7 +251,7 @@ def parse_news_list(group: str, base_url: str, list_html: str) -> List[NewsCandi
         title = normalize_space(a.get_text(" ", strip=True))
         if not href or not title:
             continue
-        if not any(kw in title for kw in KEYWORDS):
+        if not title_matches_keywords(title):
             continue
         if href.startswith("javascript:"):
             continue
@@ -235,9 +261,55 @@ def parse_news_list(group: str, base_url: str, list_html: str) -> List[NewsCandi
 
 
 def scrape_group(group: str, base_url: str, news_url: str) -> List[dict]:
+    rows: List[dict] = []
+
+    if group == "乃木坂46":
+        try:
+            payload = fetch_json_with_retry(f"{NOGI_NEWS_API}?rw=400")
+        except (requests.RequestException, ValueError):
+            return rows
+        seen_urls = set()
+        for item in payload.get("data") or []:
+            title = normalize_space(item.get("title") or "")
+            link_url = (item.get("link_url") or "").strip()
+            if not title or not link_url:
+                continue
+            if not title_matches_keywords(title):
+                continue
+            if link_url in seen_urls:
+                continue
+            seen_urls.add(link_url)
+
+            text = item.get("text") or ""
+            if not text or not any(marker in text for marker in SCHEDULE_MARKERS):
+                try:
+                    detail_html = fetch_with_retry(link_url)
+                except requests.RequestException:
+                    continue
+                text = BeautifulSoup(detail_html, "html.parser").get_text("\n", strip=True)
+            if not any(marker in text for marker in SCHEDULE_MARKERS):
+                continue
+            schedule_windows = parse_schedule_windows(text)
+            for round_name, apply_start, apply_end in schedule_windows:
+                if apply_end <= NOW_JST:
+                    continue
+                status = "未开始" if apply_start > NOW_JST else "进行中"
+                rows.append(
+                    {
+                        "group": group,
+                        "title": title,
+                        "round": round_name,
+                        "applyStart": apply_start.isoformat(),
+                        "applyEnd": apply_end.isoformat(),
+                        "status": status,
+                        "url": link_url,
+                        "source": "official_news",
+                    }
+                )
+        return rows
+
     list_html = fetch_with_retry(news_url)
     candidates = parse_news_list(group, base_url, list_html)
-    rows = []
     for candidate in candidates:
         try:
             detail_html = fetch_with_retry(candidate.url)
@@ -250,7 +322,7 @@ def scrape_group(group: str, base_url: str, news_url: str) -> List[dict]:
         for round_name, apply_start, apply_end in schedule_windows:
             if apply_end <= NOW_JST:
                 continue
-            status = "未开始" if apply_start and apply_start > NOW_JST else "进行中"
+            status = "未开始" if apply_start > NOW_JST else "进行中"
             rows.append(
                 {
                     "group": candidate.group,
