@@ -1,17 +1,7 @@
 {
-  "generatedAt": "2026-05-15T10:55:23.080320+09:00",
+  "generatedAt": "2026-05-15T15:49:14.399136+09:00",
   "timezone": "Asia/Tokyo",
   "items": [
-    {
-      "group": "乃木坂46",
-      "title": "41stシングル「最後に階段を駆け上がったのはいつだ？」発売記念オンラインミート＆グリート（個別トーク会）第10次～第12次応募受付と以降受付終了のお知らせ",
-      "round": "第10次応募受付",
-      "applyStart": "2026-05-14T14:00:00+09:00",
-      "applyEnd": "2026-05-15T14:00:00+09:00",
-      "status": "进行中",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/101909?ima=5523&pri1=202605",
-      "source": "official_news"
-    },
     {
       "group": "櫻坂46",
       "title": "ミート＆グリート 2026.05.04 15th Double A-side Single『Lonesome rabbit / What's “KAZOKU”?』発売記念 オンラインミート＆グリート（個別トーク会）開催決定！",
@@ -39,7 +29,7 @@
       "applyStart": "2026-05-21T14:00:00+09:00",
       "applyEnd": "2026-05-22T14:00:00+09:00",
       "status": "未开始",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/101909?ima=5523&pri1=202605",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/101909?ima=4849&pri1=202605",
       "source": "official_news"
     },
     {
@@ -49,7 +39,7 @@
       "applyStart": "2026-05-28T14:00:00+09:00",
       "applyEnd": "2026-05-29T14:00:00+09:00",
       "status": "未开始",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/101909?ima=5523&pri1=202605",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/101909?ima=4849&pri1=202605",
       "source": "official_news"
     }
   ]
