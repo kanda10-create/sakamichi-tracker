@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-10T11:05:02.613790+09:00",
+  "generatedAt": "2026-06-10T16:58:14.314802+09:00",
   "timezone": "Asia/Tokyo",
   "items": [
     {
@@ -8,7 +8,7 @@
       "round": "第6次応募受付",
       "applyStart": "2026-06-10T14:00:00+09:00",
       "applyEnd": "2026-06-11T14:00:00+09:00",
-      "status": "未开始",
+      "status": "进行中",
       "url": "https://sakurazaka46.com/s/s46/news/detail/S00218?ima=0000",
       "source": "official_news"
     },
@@ -18,7 +18,7 @@
       "round": "第9次応募受付",
       "applyStart": "2026-06-10T14:00:00+09:00",
       "applyEnd": "2026-06-11T14:00:00+09:00",
-      "status": "未开始",
+      "status": "进行中",
       "url": "https://www.hinatazaka46.com/s/official/news/detail/R00549?ima=0000",
       "source": "official_news"
     },
@@ -29,7 +29,7 @@
       "applyStart": "2026-06-11T14:00:00+09:00",
       "applyEnd": "2026-06-12T14:00:00+09:00",
       "status": "未开始",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/101991?ima=0502&pri1=202606",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/101991?ima=5814&pri1=202606",
       "source": "official_news"
     },
     {
@@ -39,7 +39,7 @@
       "applyStart": "2026-06-18T14:00:00+09:00",
       "applyEnd": "2026-06-19T14:00:00+09:00",
       "status": "未开始",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/101991?ima=0502&pri1=202606",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/101991?ima=5814&pri1=202606",
       "source": "official_news"
     },
     {
@@ -49,7 +49,7 @@
       "applyStart": "2026-06-25T14:00:00+09:00",
       "applyEnd": "2026-06-26T14:00:00+09:00",
       "status": "未开始",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/101991?ima=0502&pri1=202606",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/101991?ima=5814&pri1=202606",
       "source": "official_news"
     }
   ]
