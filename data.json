@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T17:00:21.654913+09:00",
+  "generatedAt": "2026-07-01T23:01:48.807270+09:00",
   "timezone": "Asia/Tokyo",
   "items": [
     {
@@ -20,6 +20,36 @@
       "applyEnd": "2026-07-02T14:00:00+09:00",
       "status": "进行中",
       "url": "https://www.hinatazaka46.com/s/official/news/detail/R00552?ima=0000",
+      "source": "official_news"
+    },
+    {
+      "group": "乃木坂46",
+      "title": "42ndシングル「是非に及ばず」発売記念オンラインミート＆グリート（個別トーク会）第4次～第6次応募受付決定！",
+      "round": "第4次応募受付",
+      "applyStart": "2026-07-02T14:00:00+09:00",
+      "applyEnd": "2026-07-03T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102054?ima=0149&pri1=202607",
+      "source": "official_news"
+    },
+    {
+      "group": "乃木坂46",
+      "title": "42ndシングル「是非に及ばず」発売記念オンラインミート＆グリート（個別トーク会）第4次～第6次応募受付決定！",
+      "round": "第5次応募受付",
+      "applyStart": "2026-07-09T14:00:00+09:00",
+      "applyEnd": "2026-07-10T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102054?ima=0149&pri1=202607",
+      "source": "official_news"
+    },
+    {
+      "group": "乃木坂46",
+      "title": "42ndシングル「是非に及ばず」発売記念オンラインミート＆グリート（個別トーク会）第4次～第6次応募受付決定！",
+      "round": "第6次応募受付",
+      "applyStart": "2026-07-16T14:00:00+09:00",
+      "applyEnd": "2026-07-17T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102054?ima=0149&pri1=202607",
       "source": "official_news"
     }
   ]
