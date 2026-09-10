@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T00:21:13.555677+09:00",
+  "generatedAt": "2026-09-11T03:45:39.798041+09:00",
   "timezone": "Asia/Tokyo",
   "items": [
     {
@@ -9,7 +9,7 @@
       "applyStart": "2026-09-10T14:00:00+09:00",
       "applyEnd": "2026-09-11T14:00:00+09:00",
       "status": "进行中",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/102223?ima=2035&pri1=202609",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102223?ima=4540&pri1=202609",
       "source": "official_news"
     },
     {
@@ -49,7 +49,7 @@
       "applyStart": "2026-09-17T14:00:00+09:00",
       "applyEnd": "2026-09-18T14:00:00+09:00",
       "status": "未开始",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/102223?ima=2035&pri1=202609",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102223?ima=4540&pri1=202609",
       "source": "official_news"
     },
     {
@@ -69,7 +69,7 @@
       "applyStart": "2026-10-01T14:00:00+09:00",
       "applyEnd": "2026-10-02T14:00:00+09:00",
       "status": "未开始",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/102223?ima=2035&pri1=202609",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102223?ima=4540&pri1=202609",
       "source": "official_news"
     }
   ]
