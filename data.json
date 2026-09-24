@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T17:48:33.395709+09:00",
+  "generatedAt": "2026-09-25T01:00:54.780485+09:00",
   "timezone": "Asia/Tokyo",
   "items": [
     {
@@ -8,7 +8,7 @@
       "round": "第3次応募受付",
       "applyStart": "2026-09-24T18:00:00+09:00",
       "applyEnd": "2026-09-25T14:00:00+09:00",
-      "status": "未开始",
+      "status": "进行中",
       "url": "https://sakurazaka46.com/s/s46/news/detail/S00225?ima=0000",
       "source": "official_news"
     },
@@ -19,7 +19,7 @@
       "applyStart": "2026-10-01T14:00:00+09:00",
       "applyEnd": "2026-10-02T14:00:00+09:00",
       "status": "未开始",
-      "url": "https://www.nogizaka46.com/s/n46/news/detail/102223?ima=4833&pri1=202609",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102223?ima=0041&pri1=202609",
       "source": "official_news"
     }
   ]
