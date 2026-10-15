@@ -1,26 +1,5 @@
 {
-  "generatedAt": "2026-10-15T11:06:05.931102+09:00",
+  "generatedAt": "2026-10-15T17:38:33.309699+09:00",
   "timezone": "Asia/Tokyo",
-  "items": [
-    {
-      "group": "櫻坂46",
-      "title": "ミート＆グリート 2026.09.30 16thシングル『愛MUST BE』発売記念 オンラインミート＆グリート（個別トーク会） 第4次～第6次応募受付決定！",
-      "round": "第6次応募受付",
-      "applyStart": "2026-10-14T14:00:00+09:00",
-      "applyEnd": "2026-10-15T14:00:00+09:00",
-      "status": "进行中",
-      "url": "https://sakurazaka46.com/s/s46/news/detail/S00226?ima=0000",
-      "source": "official_news"
-    },
-    {
-      "group": "日向坂46",
-      "title": "2026.09.29 リリース 18thシングル『イチャイチャ虫』発売記念 forTUNE meets オンラインミート＆グリート（個別トーク会）第7次～第9次応募受付決定!!",
-      "round": "第9次応募受付",
-      "applyStart": "2026-10-14T14:00:00+09:00",
-      "applyEnd": "2026-10-15T14:00:00+09:00",
-      "status": "进行中",
-      "url": "https://www.hinatazaka46.com/s/official/news/detail/R00586?ima=0000",
-      "source": "official_news"
-    }
-  ]
+  "items": []
 }
