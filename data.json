@@ -1,5 +1,36 @@
 {
-  "generatedAt": "2026-10-20T17:57:13.351320+09:00",
+  "generatedAt": "2026-10-21T00:55:39.038712+09:00",
   "timezone": "Asia/Tokyo",
-  "items": []
+  "items": [
+    {
+      "group": "乃木坂46",
+      "title": "43rdシングル『君ロス』発売記念forTUNE music限定「オンライン ミート＆グリート」開催決定！",
+      "round": "第1次応募受付",
+      "applyStart": "2026-10-22T14:00:00+09:00",
+      "applyEnd": "2026-10-23T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102341?ima=5525&pri1=202610",
+      "source": "official_news"
+    },
+    {
+      "group": "乃木坂46",
+      "title": "43rdシングル『君ロス』発売記念forTUNE music限定「オンライン ミート＆グリート」開催決定！",
+      "round": "第2次応募受付",
+      "applyStart": "2026-10-29T14:00:00+09:00",
+      "applyEnd": "2026-10-30T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102341?ima=5525&pri1=202610",
+      "source": "official_news"
+    },
+    {
+      "group": "乃木坂46",
+      "title": "43rdシングル『君ロス』発売記念forTUNE music限定「オンライン ミート＆グリート」開催決定！",
+      "round": "第3次応募受付",
+      "applyStart": "2026-11-05T14:00:00+09:00",
+      "applyEnd": "2026-11-06T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://www.nogizaka46.com/s/n46/news/detail/102341?ima=5525&pri1=202610",
+      "source": "official_news"
+    }
+  ]
 }
