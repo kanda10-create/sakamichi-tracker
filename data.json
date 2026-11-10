@@ -1,5 +1,36 @@
 {
-  "generatedAt": "2026-11-10T13:57:40.625615+09:00",
+  "generatedAt": "2026-11-11T00:52:49.062179+09:00",
   "timezone": "Asia/Tokyo",
-  "items": []
+  "items": [
+    {
+      "group": "櫻坂46",
+      "title": "ミート＆グリート 2026.11.10 16thシングル『愛MUST BE』発売記念 オンラインミート＆グリート（個別トーク会） 第10次～第13次応募受付決定！",
+      "round": "第10次応募受付",
+      "applyStart": "2026-11-11T14:00:00+09:00",
+      "applyEnd": "2026-11-12T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://sakurazaka46.com/s/s46/news/detail/S00229?ima=0000",
+      "source": "official_news"
+    },
+    {
+      "group": "櫻坂46",
+      "title": "ミート＆グリート 2026.11.10 16thシングル『愛MUST BE』発売記念 オンラインミート＆グリート（個別トーク会） 第10次～第13次応募受付決定！",
+      "round": "第12次応募受付",
+      "applyStart": "2026-11-25T14:00:00+09:00",
+      "applyEnd": "2026-11-26T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://sakurazaka46.com/s/s46/news/detail/S00229?ima=0000",
+      "source": "official_news"
+    },
+    {
+      "group": "櫻坂46",
+      "title": "ミート＆グリート 2026.11.10 16thシングル『愛MUST BE』発売記念 オンラインミート＆グリート（個別トーク会） 第10次～第13次応募受付決定！",
+      "round": "第13次応募受付",
+      "applyStart": "2026-12-02T14:00:00+09:00",
+      "applyEnd": "2026-12-03T14:00:00+09:00",
+      "status": "未开始",
+      "url": "https://sakurazaka46.com/s/s46/news/detail/S00229?ima=0000",
+      "source": "official_news"
+    }
+  ]
 }
